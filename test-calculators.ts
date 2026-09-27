@@ -258,4 +258,21 @@ const sinPts = generateGraphPoints('sin(x)', 0, 2, 1);
 if (sinPts.length < 3) throw new Error(`Graph sin(x) expected >= 3 points, got ${sinPts.length}`);
 console.log(`✓ TEST PASSED [Graph sin(x) point count]: ${sinPts.length} points`);
 
+// Custom user input test: 2x + 3 at x=0, 2, 4 -> y=3, 7, 11
+const customLinear = generateGraphPoints('2x + 3', 0, 4, 2);
+const c0 = customLinear.find(p => p.x === 0);
+const c2 = customLinear.find(p => p.x === 2);
+const c4 = customLinear.find(p => p.x === 4);
+if (!c0 || c0.y !== 3) throw new Error(`Custom graph 2x+3 at x=0: expected 3, got ${c0?.y}`);
+if (!c2 || c2.y !== 7) throw new Error(`Custom graph 2x+3 at x=2: expected 7, got ${c2?.y}`);
+if (!c4 || c4.y !== 11) throw new Error(`Custom graph 2x+3 at x=4: expected 11, got ${c4?.y}`);
+console.log(`✓ TEST PASSED [Custom Graph 2x + 3]: (0,${c0?.y}) (2,${c2?.y}) (4,${c4?.y})`);
+
+// Custom polynomial input test: x^2 - 4 at x=2 -> y=0
+const customPoly = generateGraphPoints('x^2 - 4', 0, 2, 1);
+const polyAt2 = customPoly.find(p => p.x === 2);
+if (!polyAt2 || polyAt2.y !== 0) throw new Error(`Custom graph x^2-4 at x=2: expected 0, got ${polyAt2?.y}`);
+console.log(`✓ TEST PASSED [Custom Graph x^2 - 4 at x=2]: y=${polyAt2?.y}`);
+
 console.log('✅ ALL NEW CALCULATOR TESTS PASSED');
+

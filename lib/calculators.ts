@@ -704,23 +704,73 @@ export function calculateShapeGeometry(input: ShapeInput): ShapeOutput {
 }
 
 // 17. FUNCTION GRAPH PLOTTER DATA GENERATOR
-export function generateGraphPoints(fnType: string, xMin = -10, xMax = 10, step = 0.5): { x: number; y: number }[] {
+export function generateGraphPoints(
+  fnType: string,
+  xMin = -10,
+  xMax = 10,
+  step = 0.5
+): { x: number; y: number }[] {
   const points: { x: number; y: number }[] = [];
-  for (let x = xMin; x <= xMax; x += step) {
+  const trimmed = fnType.trim();
+  if (!trimmed) return points;
+
+  // Pre-process expression for arbitrary user input
+  // 1. Convert power notation ^ to **
+  // 2. Convert implicit multiplication e.g. 2x -> 2*x, 3(x) -> 3*(x), (x+1)(x-1) -> (x+1)*(x-1)
+  // 3. Map trig and math functions: sin, cos, tan, sqrt, abs, ln, log, pi, e
+  const preparedExpr = trimmed
+    .replace(/\^/g, '**')
+    .replace(/(\d)\s*([a-zA-Z(])/g, '$1*$2')
+    .replace(/(\))\s*([0-9a-zA-Z(])/g, '$1*$2')
+    .replace(/\bsin\b/gi, 'Math.sin')
+    .replace(/\bcos\b/gi, 'Math.cos')
+    .replace(/\btan\b/gi, 'Math.tan')
+    .replace(/\bsqrt\b/gi, 'Math.sqrt')
+    .replace(/\babs\b/gi, 'Math.abs')
+    .replace(/\bln\b/gi, 'Math.log')
+    .replace(/\blog\b/gi, 'Math.log10')
+    .replace(/\bpi\b/gi, 'Math.PI')
+    .replace(/(?<![a-zA-Z.])e(?![a-zA-Z(])/g, 'Math.E');
+
+  // Verify only allowed tokens (numbers, basic operators, parens, dot, and Math.*)
+  const sanitized = preparedExpr.replace(/[^0-9+\-*/.%()xXMath\.PIEsqrtlogabsicontan]/g, '');
+
+  let compiledFn: ((xVal: number) => number) | null = null;
+  try {
+    compiledFn = new Function('x', `try { return Number(${sanitized}); } catch { return NaN; }`) as (xVal: number) => number;
+  } catch {
+    compiledFn = null;
+  }
+
+  const safeStep = step > 0 ? step : 0.5;
+  const min = Math.min(xMin, xMax);
+  const max = Math.max(xMin, xMax);
+
+  for (let x = min; x <= max + 0.00001; x += safeStep) {
+    const roundedX = Math.round(x * 100) / 100;
     let y = 0;
-    try {
-      if (fnType === 'sin(x)') y = Math.sin(x);
-      else if (fnType === 'cos(x)') y = Math.cos(x);
-      else if (fnType === 'x^2') y = x * x;
-      else if (fnType === 'x^3') y = x * x * x;
-      else if (fnType === '2x + 3') y = 2 * x + 3;
-      else y = Math.sin(x);
-    } catch {
-      y = 0;
+
+    if (compiledFn) {
+      try {
+        const val = compiledFn(roundedX);
+        y = typeof val === 'number' && !isNaN(val) && isFinite(val) ? val : NaN;
+      } catch {
+        y = NaN;
+      }
+    } else {
+      // Fallback matching presets
+      if (trimmed === 'sin(x)') y = Math.sin(roundedX);
+      else if (trimmed === 'cos(x)') y = Math.cos(roundedX);
+      else if (trimmed === 'x^2' || trimmed === 'x²') y = roundedX * roundedX;
+      else if (trimmed === 'x^3' || trimmed === 'x³') y = roundedX * roundedX * roundedX;
+      else if (trimmed === '2x + 3') y = 2 * roundedX + 3;
+      else y = Math.sin(roundedX);
     }
+
     if (!isNaN(y) && isFinite(y)) {
-      points.push({ x: Math.round(x * 10) / 10, y: Math.round(y * 100) / 100 });
+      points.push({ x: roundedX, y: Math.round(y * 100) / 100 });
     }
   }
+
   return points;
 }
