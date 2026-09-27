@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { CALCULATORS, CATEGORIES } from '@/data/calculator-directory';
 import { AdSlot } from '@/components/AdSlot';
 import { MortgageCalculatorUI } from '@/components/calculators/MortgageCalculatorUI';
-import { HeroShowcaseVideo } from '@/components/HeroShowcaseVideo';
+import { ParallaxVideoShowcase } from '@/components/ParallaxVideoShowcase';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
   Home,
@@ -85,9 +85,14 @@ export default function HomePage() {
           Accurate, live-updating calculations for US mortgage, loan EMI, paycheck taxes, compound interest, TDEE, GPA, and business ROI.
         </p>
 
-        {/* Hero Showcase Frame */}
+        {/* Hero Showcase Frame (Video 1 - Lagging Parallax ~0.6x) */}
         <div className="pt-2 pb-4">
-          <HeroShowcaseVideo />
+          <ParallaxVideoShowcase
+            src="/videos/hero-loop.mp4"
+            poster="/videos/hero-loop-poster.jpg"
+            alt="Calculator Input to Result Showcase"
+            parallaxSpeed={0.6}
+          />
         </div>
       </section>
 
@@ -120,6 +125,28 @@ export default function HomePage() {
       </section>
 
       <AdSlot slotId="homepage-top-banner" format="horizontal" />
+
+      {/* Search & Discovery Showcase Section (Video 2 - Leading Parallax ~1.25x) */}
+      <section className="py-6 space-y-4 text-center max-w-3xl mx-auto">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 text-xs font-mono uppercase tracking-widest font-semibold">
+          Instant Discovery & Search
+        </div>
+        <h2 className="text-2xl font-bold font-sans text-zinc-900 dark:text-zinc-100">
+          Find Any Tool in Seconds
+        </h2>
+        <p className="text-sm text-zinc-600 dark:text-zinc-400 font-sans">
+          Search across 12+ specialized financial, health, mathematical, and business calculators with live parameter previews.
+        </p>
+
+        <div className="pt-2">
+          <ParallaxVideoShowcase
+            src="/videos/search-loop.mp4"
+            poster="/videos/search-loop-poster.jpg"
+            alt="Search and Discovery Showcase"
+            parallaxSpeed={1.25}
+          />
+        </div>
+      </section>
 
       {/* Asymmetrical Tabular Category & Tool List */}
       <motion.section
