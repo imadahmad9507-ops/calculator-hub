@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { CALCULATORS, CATEGORIES } from '@/data/calculator-directory';
 import { AdSlot } from '@/components/AdSlot';
 import { MortgageCalculatorUI } from '@/components/calculators/MortgageCalculatorUI';
+import { HeroShowcaseVideo } from '@/components/HeroShowcaseVideo';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
   Home,
@@ -79,9 +80,15 @@ export default function HomePage() {
         <h1 className="text-3xl md:text-5xl font-black font-sans tracking-tight text-zinc-900 dark:text-zinc-100">
           Precision <span className="text-[#065F46] dark:text-[#34D399]">Calculator Suite</span> for Instant Decisions
         </h1>
+
         <p className="text-sm md:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans">
           Accurate, live-updating calculations for US mortgage, loan EMI, paycheck taxes, compound interest, TDEE, GPA, and business ROI.
         </p>
+
+        {/* Hero Showcase Frame */}
+        <div className="pt-2 pb-4">
+          <HeroShowcaseVideo />
+        </div>
       </section>
 
       {/* Asymmetrical Featured Dual-Pane Instrument Console (Mortgage) */}

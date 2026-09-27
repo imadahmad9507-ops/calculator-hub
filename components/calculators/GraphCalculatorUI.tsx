@@ -45,15 +45,17 @@ export function GraphCalculatorUI() {
     if (yValues.length === 0) return { yMin: -10, yMax: 10 };
     let min = Math.min(...yValues);
     let max = Math.max(...yValues);
-    if (min === max) {
-      min -= 1;
-      max += 1;
+    if (Math.abs(max - min) < 1e-5) {
+      // For constant functions (e.g., f(x) = sin(4) ≈ -0.757), anchor vertically around the value
+      const pad = Math.max(1, Math.abs(min) * 0.5);
+      min -= pad;
+      max += pad;
     }
     // Add 10% breathing room padding
     const padding = (max - min) * 0.1 || 1;
     return {
-      yMin: Math.floor(min - padding),
-      yMax: Math.ceil(max + padding),
+      yMin: Number((min - padding).toFixed(2)),
+      yMax: Number((max + padding).toFixed(2)),
     };
   }, [points]);
 

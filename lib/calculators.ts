@@ -802,7 +802,12 @@ export function generateGraphPoints(
     }
 
     if (!isNaN(y) && isFinite(y)) {
-      points.push({ x: roundedX, y: Math.round(y * 100) / 100 });
+      // Cap extreme values to avoid plotting distortion
+      const MAX_ABS = 1e4;
+      const safeY = Math.abs(y) > MAX_ABS ? NaN : Math.round(y * 100) / 100;
+      if (!isNaN(safeY)) {
+        points.push({ x: roundedX, y: safeY });
+      }
     }
   }
 
