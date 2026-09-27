@@ -7,7 +7,6 @@ interface AdSlotProps {
 }
 
 export function AdSlot({ slotId = 'default-ad-slot', format = 'horizontal', className = '' }: AdSlotProps) {
-  // Sizing definitions for standard AdSense dimensions
   const formatClasses = {
     horizontal: 'w-full min-h-[90px] max-w-[728px]',
     rectangle: 'w-full min-h-[250px] max-w-[300px]',
@@ -16,26 +15,19 @@ export function AdSlot({ slotId = 'default-ad-slot', format = 'horizontal', clas
 
   return (
     <div
-      className={`my-6 mx-auto border border-dashed border-amber-500/30 bg-amber-500/5 rounded-lg p-4 flex flex-col items-center justify-center text-center select-none ${formatClasses} ${className}`}
+      className={`my-6 mx-auto border border-dashed border-emerald-600/30 dark:border-emerald-500/30 bg-emerald-50/30 dark:bg-emerald-950/10 rounded-xl p-4 flex flex-col items-center justify-center text-center select-none ${formatClasses} ${className}`}
       aria-label="Advertisement Placeholder"
     >
-      <div className="flex items-center gap-2 text-xs font-mono tracking-wider text-amber-500/80 uppercase mb-1">
+      <div className="flex items-center gap-2 text-xs font-mono tracking-wider text-emerald-800 dark:text-emerald-400 uppercase mb-1">
         <span>Advertisement</span>
-        <span className="text-zinc-500">•</span>
+        <span className="text-zinc-400">•</span>
         <span>{format}</span>
       </div>
-      <p className="text-xs text-zinc-400 font-mono">
-        AdSense Slot ID: <span className="text-amber-400">{slotId}</span>
+      <p className="text-xs text-zinc-500 dark:text-zinc-400 font-mono">
+        AdSense Slot ID: <span className="text-emerald-700 dark:text-emerald-400 font-semibold">{slotId}</span>
       </p>
 
-      {/* TODO: Insert real Google AdSense <ins> tag here once approved, e.g.:
-      <ins className="adsbygoogle"
-           style={{ display: 'block' }}
-           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-           data-ad-slot={slotId}
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
-      */}
+      {/* TODO: Replace this placeholder div with official Google AdSense <ins> tag when ready for production monetization */}
     </div>
   );
 }

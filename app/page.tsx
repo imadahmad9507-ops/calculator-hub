@@ -1,8 +1,11 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
-import { Metadata } from 'next';
 import { CALCULATORS, CATEGORIES } from '@/data/calculator-directory';
 import { AdSlot } from '@/components/AdSlot';
+import { MortgageCalculatorUI } from '@/components/calculators/MortgageCalculatorUI';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
   Home,
   Landmark,
@@ -19,13 +22,11 @@ import {
   ArrowRight,
   Zap,
   Calculator,
+  Code,
+  Cpu,
+  Box,
+  LineChart,
 } from 'lucide-react';
-
-export const metadata: Metadata = {
-  title: 'CalcHub Pro — Precision Instrument Calculator Suite',
-  description:
-    'Free, live-computing precision calculators for US finance, health, math, business, and everyday unit conversions.',
-};
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Home,
@@ -40,102 +41,143 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Calendar,
   ArrowLeftRight,
   Briefcase,
+  Calculator,
+  Code,
+  Cpu,
+  Box,
+  LineChart,
 };
 
 export default function HomePage() {
+  const shouldReduceMotion = useReducedMotion();
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.05 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 12 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.3 },
+    },
+  };
+
   return (
     <div className="space-y-12">
-      {/* Hero Section */}
-      <section className="text-center py-10 md:py-16 space-y-4 max-w-3xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-400 text-xs font-mono uppercase tracking-widest">
+      {/* Hero Header */}
+      <section className="text-center py-6 md:py-10 space-y-3 max-w-3xl mx-auto">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md border border-[#065F46]/20 dark:border-[#34D399]/30 bg-[#065F46]/10 dark:bg-[#34D399]/10 text-[#065F46] dark:text-[#34D399] text-xs font-mono uppercase tracking-widest font-semibold">
           <Zap className="w-3.5 h-3.5" />
           100% Free • Live Computation • No Ads Registration Required
         </div>
-        <h1 className="text-4xl md:text-6xl font-black font-sans tracking-tight text-zinc-100">
-          Precision <span className="text-amber-500">Calculator Suite</span> for Instant Decisions
+        <h1 className="text-3xl md:text-5xl font-black font-sans tracking-tight text-zinc-900 dark:text-zinc-100">
+          Precision <span className="text-[#065F46] dark:text-[#34D399]">Calculator Suite</span> for Instant Decisions
         </h1>
-        <p className="text-base md:text-lg text-zinc-400 leading-relaxed font-sans">
-          Accurate, live-updating calculations for US mortgage, tax paycheck, compound interest, TDEE, GPA, and business ROI.
+        <p className="text-sm md:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed font-sans">
+          Accurate, live-updating calculations for US mortgage, loan EMI, paycheck taxes, compound interest, TDEE, GPA, and business ROI.
         </p>
+      </section>
+
+      {/* Asymmetrical Featured Dual-Pane Instrument Console (Mortgage) */}
+      <section className="p-6 md:p-8 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xs">
+        <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 pb-4 mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-md bg-[#065F46]/10 dark:bg-[#34D399]/10 border border-[#065F46]/20 dark:border-[#34D399]/30 text-[#065F46] dark:text-[#34D399] flex items-center justify-center">
+              <Calculator className="w-4 h-4" />
+            </div>
+            <div>
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[#065F46] dark:text-[#34D399] font-bold">
+                Live Interactive Instrument Console
+              </span>
+              <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 font-sans mt-0.5">
+                US Mortgage Amortization Console
+              </h2>
+            </div>
+          </div>
+          <Link
+            href="/calculators/mortgage-calculator"
+            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-[#065F46] dark:text-[#34D399] hover:underline"
+          >
+            <span>Full Tool</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
+        <MortgageCalculatorUI />
       </section>
 
       <AdSlot slotId="homepage-top-banner" format="horizontal" />
 
-      {/* Category Grid */}
-      <section className="space-y-6">
-        <h2 className="text-xl font-bold font-sans text-zinc-100 flex items-center gap-2">
-          <span>Explore Calculator Categories</span>
+      {/* Asymmetrical Tabular Category & Tool List */}
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-50px' }}
+        variants={containerVariants}
+        className="space-y-6"
+      >
+        <h2 className="text-xl font-bold font-sans text-zinc-900 dark:text-zinc-100">
+          Calculator Directories & Tools
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {CATEGORIES.map((cat) => {
-            const count = CALCULATORS.filter((c) => c.category === cat.id).length;
+            const calcsInCat = CALCULATORS.filter((c) => c.category === cat.id);
             return (
-              <Link
+              <motion.div
                 key={cat.id}
-                href={`/${cat.id}`}
-                className="group p-5 rounded-xl border border-zinc-800/80 bg-zinc-900/60 hover:bg-zinc-900 hover:border-amber-500/50 transition-all flex flex-col justify-between shadow-lg"
+                variants={itemVariants}
+                className="p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 space-y-4"
               >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-mono uppercase tracking-widest text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
-                      {count} Tools
-                    </span>
-                    <ArrowRight className="w-4 h-4 text-zinc-500 group-hover:text-amber-400 group-hover:translate-x-1 transition-all" />
-                  </div>
-                  <h3 className="text-lg font-bold text-zinc-100 group-hover:text-amber-400 transition-colors">
-                    {cat.name}
-                  </h3>
-                  <p className="text-xs text-zinc-400 leading-relaxed mt-1">{cat.description}</p>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Bento Grid of All 12 Calculators */}
-      <section className="space-y-6">
-        <h2 className="text-xl font-bold font-sans text-zinc-100">
-          All 12 Interactive Calculators
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {CALCULATORS.map((calc) => {
-            const IconComponent = ICON_MAP[calc.icon] || Calculator;
-            return (
-              <Link
-                key={calc.slug}
-                href={`/calculators/${calc.slug}`}
-                className="group p-5 rounded-xl border border-zinc-800 bg-zinc-900/50 hover:border-amber-500/50 hover:bg-zinc-900 transition-all shadow-md flex flex-col justify-between"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:bg-amber-500 group-hover:text-zinc-950 transition-all">
-                      <IconComponent className="w-5 h-5" />
-                    </div>
-                    <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-widest bg-zinc-800 px-2 py-0.5 rounded">
-                      {calc.category}
-                    </span>
-                  </div>
+                <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800/80 pb-3">
                   <div>
-                    <h3 className="text-base font-bold text-zinc-100 group-hover:text-amber-400 transition-colors">
-                      {calc.name}
-                    </h3>
-                    <p className="text-xs text-zinc-400 leading-relaxed mt-1 line-clamp-2">
-                      {calc.description}
-                    </p>
+                    <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100 font-sans">{cat.name}</h3>
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{cat.description}</p>
                   </div>
+                  <Link
+                    href={`/${cat.id}`}
+                    className="text-xs font-mono text-[#065F46] dark:text-[#34D399] font-bold hover:underline shrink-0"
+                  >
+                    View All ({calcsInCat.length})
+                  </Link>
                 </div>
-                <div className="mt-4 pt-3 border-t border-zinc-800/60 flex items-center justify-between text-xs text-amber-400/90 font-mono">
-                  <span>Open Calculator</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+
+                <div className="space-y-2">
+                  {calcsInCat.map((calc) => {
+                    const IconComponent = ICON_MAP[calc.icon] || Calculator;
+                    return (
+                      <Link
+                        key={calc.slug}
+                        href={`/calculators/${calc.slug}`}
+                        className="group flex items-center justify-between p-3 rounded-md border border-zinc-100 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-950/40 hover:bg-white dark:hover:bg-zinc-800/80 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-150"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-7 h-7 rounded bg-[#065F46]/10 dark:bg-[#34D399]/10 text-[#065F46] dark:text-[#34D399] flex items-center justify-center">
+                            <IconComponent className="w-3.5 h-3.5" />
+                          </div>
+                          <div>
+                            <h4 className="text-xs font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-[#065F46] dark:group-hover:text-[#34D399] transition-colors">
+                              {calc.name}
+                            </h4>
+                            <p className="text-[11px] text-zinc-500 dark:text-zinc-400 line-clamp-1">{calc.description}</p>
+                          </div>
+                        </div>
+                        <ArrowRight className="w-3.5 h-3.5 text-zinc-400 group-hover:text-[#065F46] dark:group-hover:text-[#34D399] group-hover:translate-x-1 transition-all" />
+                      </Link>
+                    );
+                  })}
                 </div>
-              </Link>
+              </motion.div>
             );
           })}
         </div>
-      </section>
+      </motion.section>
 
       <AdSlot slotId="homepage-bottom-banner" format="rectangle" />
     </div>

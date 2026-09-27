@@ -517,3 +517,210 @@ export function calculateROI(input: ROIInput): ROIOutput {
     cagr: Math.round(cagr * 100) / 100,
   };
 }
+
+// 13. PROGRAMMING CALCULATOR
+export interface ProgrammingInput {
+  value: number;
+  operation?: 'AND' | 'OR' | 'XOR' | 'NOT' | 'LSH' | 'RSH';
+  operand2?: number;
+}
+
+export interface ProgrammingOutput {
+  dec: string;
+  hex: string;
+  bin: string;
+  oct: string;
+  bitwiseResult?: number;
+}
+
+export function calculateProgramming(input: ProgrammingInput): ProgrammingOutput {
+  const val = Math.floor(input.value || 0);
+  let bitwiseResult: number | undefined = undefined;
+
+  if (input.operation) {
+    const op2 = Math.floor(input.operand2 || 0);
+    if (input.operation === 'AND') bitwiseResult = (val & op2) >>> 0;
+    else if (input.operation === 'OR') bitwiseResult = (val | op2) >>> 0;
+    else if (input.operation === 'XOR') bitwiseResult = (val ^ op2) >>> 0;
+    else if (input.operation === 'NOT') bitwiseResult = (~val) >>> 0;
+    else if (input.operation === 'LSH') bitwiseResult = (val << (op2 % 32)) >>> 0;
+    else if (input.operation === 'RSH') bitwiseResult = (val >>> (op2 % 32)) >>> 0;
+  }
+
+  const target = bitwiseResult !== undefined ? bitwiseResult : (val >>> 0);
+
+  return {
+    dec: target.toString(10),
+    hex: '0x' + target.toString(16).toUpperCase(),
+    bin: target.toString(2).padStart(32, '0').match(/.{1,4}/g)?.join(' ') || target.toString(2),
+    oct: '0o' + target.toString(8),
+    bitwiseResult: target,
+  };
+}
+
+// 14. STANDARD BASIC CALCULATOR
+export function evaluateBasicExpression(expr: string): number {
+  try {
+    const sanitized = expr.replace(/[^0-9+\-*/.%()]/g, '');
+    if (!sanitized) return 0;
+    // Safe numeric evaluation using Function constructor
+    const res = new Function(`return (${sanitized})`)();
+    return typeof res === 'number' && !isNaN(res) && isFinite(res) ? Math.round(res * 100000) / 100000 : 0;
+  } catch {
+    return 0;
+  }
+}
+
+// 15. SCIENTIFIC CALCULATOR
+export interface ScientificInput {
+  expression: string;
+  angleMode: 'deg' | 'rad';
+}
+
+export function evaluateScientific(input: ScientificInput): number {
+  try {
+    const { expression, angleMode } = input;
+    if (!expression.trim()) return 0;
+
+    let expr = expression;
+
+    // 1. Apply trig substitutions FIRST (before 'e' replacement corrupts sin/cos/tan)
+    if (angleMode === 'deg') {
+      expr = expr
+        .replace(/sin\(([^)]+)\)/g, 'Math.sin(($1)*Math.PI/180)')
+        .replace(/cos\(([^)]+)\)/g, 'Math.cos(($1)*Math.PI/180)')
+        .replace(/tan\(([^)]+)\)/g, 'Math.tan(($1)*Math.PI/180)')
+        .replace(/asin\(([^)]+)\)/g, '(Math.asin($1)*180/Math.PI)')
+        .replace(/acos\(([^)]+)\)/g, '(Math.acos($1)*180/Math.PI)')
+        .replace(/atan\(([^)]+)\)/g, '(Math.atan($1)*180/Math.PI)');
+    } else {
+      expr = expr
+        .replace(/asin\(/g, 'Math.asin(')
+        .replace(/acos\(/g, 'Math.acos(')
+        .replace(/atan\(/g, 'Math.atan(')
+        .replace(/sin\(/g, 'Math.sin(')
+        .replace(/cos\(/g, 'Math.cos(')
+        .replace(/tan\(/g, 'Math.tan(');
+    }
+
+    // 2. Apply other function substitutions
+    expr = expr
+      .replace(/sqrt\(/g, 'Math.sqrt(')
+      .replace(/log\(/g, 'Math.log10(')
+      .replace(/ln\(/g, 'Math.log(')
+      .replace(/abs\(/g, 'Math.abs(')
+      .replace(/π/g, 'Math.PI');
+
+    // 3. Replace standalone 'e' constant (not part of identifiers like 'Math.E' already inserted)
+    expr = expr.replace(/(?<![a-zA-Z.])e(?![a-zA-Z(])/g, 'Math.E');
+
+    // 4. Replace ^ with ** for exponentiation
+    expr = expr.replace(/\^/g, '**');
+
+    // 5. Sanitize: allow digits, operators, parens, dot, and Math expressions
+    const sanitized = expr.replace(/[^0-9+\-*/.%()Math\.PIEsqrtlogasincotan]/g, '');
+    const res = new Function(`return (${sanitized})`)();
+    return typeof res === 'number' && !isNaN(res) && isFinite(res) ? Math.round(res * 100000) / 100000 : 0;
+  } catch {
+    return 0;
+  }
+}
+
+// 16. SHAPE GEOMETRY CALCULATOR
+export type ShapeType = 'circle' | 'rectangle' | 'sphere' | 'cylinder' | 'cone';
+
+export interface ShapeInput {
+  shape: ShapeType;
+  dim1: number; // radius or width
+  dim2?: number; // length or height
+}
+
+export interface ShapeOutput {
+  areaOrSurface: number;
+  perimeterOrVolume: number;
+  label1: string;
+  label2: string;
+}
+
+export function calculateShapeGeometry(input: ShapeInput): ShapeOutput {
+  const { shape, dim1, dim2 = 0 } = input;
+  const r = Math.max(0, dim1);
+  const h = Math.max(0, dim2);
+
+  if (shape === 'circle') {
+    const area = Math.PI * r * r;
+    const circumference = 2 * Math.PI * r;
+    return {
+      areaOrSurface: Math.round(area * 100) / 100,
+      perimeterOrVolume: Math.round(circumference * 100) / 100,
+      label1: 'Area (π r²)',
+      label2: 'Circumference (2 π r)',
+    };
+  }
+
+  if (shape === 'rectangle') {
+    const area = r * h;
+    const perimeter = 2 * (r + h);
+    return {
+      areaOrSurface: Math.round(area * 100) / 100,
+      perimeterOrVolume: Math.round(perimeter * 100) / 100,
+      label1: 'Area (w × h)',
+      label2: 'Perimeter (2w + 2h)',
+    };
+  }
+
+  if (shape === 'sphere') {
+    const surfaceArea = 4 * Math.PI * r * r;
+    const volume = (4 / 3) * Math.PI * Math.pow(r, 3);
+    return {
+      areaOrSurface: Math.round(surfaceArea * 100) / 100,
+      perimeterOrVolume: Math.round(volume * 100) / 100,
+      label1: 'Surface Area (4 π r²)',
+      label2: 'Volume (4/3 π r³)',
+    };
+  }
+
+  if (shape === 'cylinder') {
+    const surfaceArea = 2 * Math.PI * r * (r + h);
+    const volume = Math.PI * r * r * h;
+    return {
+      areaOrSurface: Math.round(surfaceArea * 100) / 100,
+      perimeterOrVolume: Math.round(volume * 100) / 100,
+      label1: 'Surface Area',
+      label2: 'Volume (π r² h)',
+    };
+  }
+
+  // cone
+  const slant = Math.sqrt(r * r + h * h);
+  const surfaceArea = Math.PI * r * (r + slant);
+  const volume = (1 / 3) * Math.PI * r * r * h;
+  return {
+    areaOrSurface: Math.round(surfaceArea * 100) / 100,
+    perimeterOrVolume: Math.round(volume * 100) / 100,
+    label1: 'Surface Area',
+    label2: 'Volume (1/3 π r² h)',
+  };
+}
+
+// 17. FUNCTION GRAPH PLOTTER DATA GENERATOR
+export function generateGraphPoints(fnType: string, xMin = -10, xMax = 10, step = 0.5): { x: number; y: number }[] {
+  const points: { x: number; y: number }[] = [];
+  for (let x = xMin; x <= xMax; x += step) {
+    let y = 0;
+    try {
+      if (fnType === 'sin(x)') y = Math.sin(x);
+      else if (fnType === 'cos(x)') y = Math.cos(x);
+      else if (fnType === 'x^2') y = x * x;
+      else if (fnType === 'x^3') y = x * x * x;
+      else if (fnType === '2x + 3') y = 2 * x + 3;
+      else y = Math.sin(x);
+    } catch {
+      y = 0;
+    }
+    if (!isNaN(y) && isFinite(y)) {
+      points.push({ x: Math.round(x * 10) / 10, y: Math.round(y * 100) / 100 });
+    }
+  }
+  return points;
+}

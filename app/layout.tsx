@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
+import { Geist, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Navbar } from '@/components/Navbar';
@@ -12,11 +12,6 @@ const geistSans = Geist({
 
 const jetbrainsMono = JetBrains_Mono({
   variable: '--font-mono',
-  subsets: ['latin'],
-});
-
-const spaceGrotesk = Space_Grotesk({
-  variable: '--font-heading',
   subsets: ['latin'],
 });
 
@@ -51,11 +46,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable} font-sans bg-zinc-950 text-zinc-100 antialiased min-h-screen flex flex-col selection:bg-amber-500/30 selection:text-amber-300`}
+        className={`${geistSans.variable} ${jetbrainsMono.variable} font-sans bg-[#F5F7F6] text-[#11181C] dark:bg-[#0D1114] dark:text-[#F1F3F5] antialiased min-h-screen flex flex-col selection:bg-emerald-500/20 selection:text-emerald-900 transition-colors duration-200`}
       >
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <Navbar />
           <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">{children}</main>
           <Footer />

@@ -1,20 +1,39 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 160 10% 97%; /* #F5F7F6 Cool Technical Ice-Grey */
+    --foreground: 200 25% 9%;  /* #11181C High-contrast Graphite Black */
+    --card-bg: 0 0% 100%;       /* #FFFFFF Clean Workstation Panel */
+    --card-border: 200 12% 90%; /* #E1E5E8 Hairline Border */
+    --text-muted: 200 8% 43%;   /* #687076 Cool Neutral Grey */
+    --accent-signal: 161 88% 20%; /* #065F46 Deep Pine Green */
+    --readout-bg: 163 80% 9%;   /* #062C22 Contained Deep Console Readout */
+    --readout-text: 156 73% 52%; /* #34D399 Precision Emerald Output */
   }
 
-  .light {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+  .dark {
+    --background: 200 20% 6%;   /* #0D1114 Dark Slate Canvas */
+    --foreground: 200 15% 95%;  /* #F1F3F5 Off-white Text */
+    --card-bg: 200 15% 10%;     /* #141A1F Dark Workstation Panel */
+    --card-border: 200 10% 18%; /* #242D35 Hairline Border */
+    --text-muted: 200 10% 60%;  /* #8E98A0 Neutral Grey */
+    --accent-signal: 156 73% 52%; /* #34D399 Precision Emerald */
+    --readout-bg: 163 90% 6%;   /* #041F18 Deep Console Readout */
+    --readout-text: 156 73% 52%; /* #34D399 Precision Emerald Output */
   }
 }
 
 body {
-  background-color: #09090b;
-  color: #f4f4f5;
+  background-color: #F5F7F6;
+  color: #11181C;
+}
+
+.dark body {
+  background-color: #0D1114;
+  color: #F1F3F5;
 }
 
 /* Hide scrollbar for clean precision display */

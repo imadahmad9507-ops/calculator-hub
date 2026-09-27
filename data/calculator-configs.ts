@@ -11,6 +11,11 @@ import { TipCalculatorUI } from '@/components/calculators/TipCalculatorUI';
 import { AgeCalculatorUI } from '@/components/calculators/AgeCalculatorUI';
 import { UnitConverterUI } from '@/components/calculators/UnitConverterUI';
 import { ROICalculatorUI } from '@/components/calculators/ROICalculatorUI';
+import { ProgrammingCalculatorUI } from '@/components/calculators/ProgrammingCalculatorUI';
+import { StandardBasicCalculatorUI } from '@/components/calculators/StandardBasicCalculatorUI';
+import { ScientificCalculatorUI } from '@/components/calculators/ScientificCalculatorUI';
+import { ShapeGeometryCalculatorUI } from '@/components/calculators/ShapeGeometryCalculatorUI';
+import { GraphCalculatorUI } from '@/components/calculators/GraphCalculatorUI';
 
 export interface DynamicCalculatorConfig {
   component: React.ComponentType;
@@ -215,4 +220,86 @@ export const CALCULATOR_CONFIGS: Record<string, DynamicCalculatorConfig> = {
     ],
     disclaimer: 'Calculations do not include brokerage fees or capital gains taxes.',
   },
+  'programming-calculator': {
+    component: ProgrammingCalculatorUI,
+    howItWorks:
+      'Converts a decimal integer to its Hexadecimal, Binary, and Octal equivalents, and applies standard bitwise operations (AND, OR, XOR, NOT) between two operands.',
+    formula: 'Hex = toString(16) | Bin = toString(2) | Oct = toString(8) | Bitwise: A & B, A | B, A ^ B, ~A',
+    faqs: [
+      {
+        question: 'What are bitwise operations?',
+        answer: 'Bitwise operations (AND, OR, XOR, NOT) work directly on the binary representations of integers, flipping or comparing individual bits.',
+      },
+      {
+        question: 'What range of numbers are supported?',
+        answer: 'Whole integers from 0 to 2^32−1 (unsigned 32-bit range). Negative numbers use JavaScript signed 32-bit integer representation for NOT.',
+      },
+    ],
+    disclaimer: 'Results are computed using JavaScript 32-bit integer arithmetic.',
+  },
+  'standard-basic-calculator': {
+    component: StandardBasicCalculatorUI,
+    howItWorks:
+      'An interactive arithmetic calculator with a display and keypad. Supports basic operations (+, −, ×, ÷) and memory functions (M+, M−, MR, MC).',
+    formula: 'Standard arithmetic: addition, subtraction, multiplication, division with operator precedence.',
+    faqs: [
+      {
+        question: 'What do the memory buttons do?',
+        answer: 'M+ adds the current display to memory, M− subtracts it, MR recalls the stored value to display, and MC clears memory to zero.',
+      },
+      {
+        question: 'How is division by zero handled?',
+        answer: 'Dividing by zero produces an "Error" state on the display and resets the calculator.',
+      },
+    ],
+  },
+  'scientific-calculator': {
+    component: ScientificCalculatorUI,
+    howItWorks:
+      'Evaluates scientific and trigonometric expressions. Supports sin, cos, tan, inverse trig functions, natural log, log base-10, square root, exponentiation, and π / e constants.',
+    formula: 'sin(x), cos(x), tan(x), ln(x), log(x), √x, xʸ — DEG mode converts angles: rad = deg × π/180',
+    faqs: [
+      {
+        question: 'What is the difference between DEG and RAD mode?',
+        answer: 'In DEG mode, trigonometric functions accept angles in degrees. In RAD mode, they accept radians. Toggle the DEG/RAD button to switch.',
+      },
+      {
+        question: 'How are inverse trig functions used?',
+        answer: 'sin⁻¹, cos⁻¹, and tan⁻¹ compute the angle (in degrees or radians) whose trig value equals the input.',
+      },
+    ],
+  },
+  'shape-geometry-calculator': {
+    component: ShapeGeometryCalculatorUI,
+    howItWorks:
+      'Computes area, perimeter (2D shapes), or surface area and volume (3D shapes) using standard geometric formulas for circle, rectangle, triangle, sphere, cylinder, and cone.',
+    formula: 'Circle: A=πr², P=2πr | Rect: A=lw, P=2(l+w) | Sphere: V=(4/3)πr³, SA=4πr² | Cylinder: V=πr²h, SA=2πr(r+h)',
+    faqs: [
+      {
+        question: 'Which shapes are supported?',
+        answer: 'Circle, rectangle, triangle (Heron\'s formula), sphere, cylinder, and cone. Select the shape to reveal the required dimension inputs.',
+      },
+      {
+        question: 'What units are the results in?',
+        answer: 'Results are in the same units you enter — if you enter centimeters, area will be in cm² and volume in cm³.',
+      },
+    ],
+  },
+  'graph-calculator': {
+    component: GraphCalculatorUI,
+    howItWorks:
+      'Plots 2D mathematical functions over a configurable x-axis range. Evaluates functions point-by-point and renders the curve as an SVG path on a Cartesian plane with grid lines.',
+    formula: 'f(x) evaluated at evenly spaced x values: sin(x), cos(x), tan(x), x², x³, custom polynomial, etc.',
+    faqs: [
+      {
+        question: 'What function types can I plot?',
+        answer: 'You can plot sin(x), cos(x), tan(x), x², x³, and custom expressions like 2x+1 using standard mathematical notation.',
+      },
+      {
+        question: 'How do I set the x-axis range?',
+        answer: 'Enter the minimum and maximum x values in the range inputs. The plotter evaluates the function at 200 evenly-spaced points within that range.',
+      },
+    ],
+  },
 };
+

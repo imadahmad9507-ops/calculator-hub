@@ -11,6 +11,11 @@ import {
   calculateAge,
   convertUnits,
   calculateROI,
+  calculateProgramming,
+  evaluateBasicExpression,
+  evaluateScientific,
+  calculateShapeGeometry,
+  generateGraphPoints,
 } from './lib/calculators';
 
 function assertEqual(name: string, actual: number, expected: number, tolerance = 0.01) {
@@ -181,3 +186,76 @@ assertEqual('Zero-Rate Loan', calculateLoanEMI({
   loanTermMonths: 36,
 }).monthlyEMI, 416.67);
 console.log('✅ ALL REQUIRED USER-SPECIFIED CASES PASSED');
+
+console.log('--- NEW CALCULATOR TESTS ---');
+
+// 13. Programming Calculator: 42 in decimal
+const prog1 = calculateProgramming({ value: 42 });
+if (prog1.hex !== '0x2A') throw new Error(`Programming hex: expected 0x2A, got ${prog1.hex}`);
+if (prog1.dec !== '42') throw new Error(`Programming dec: expected 42, got ${prog1.dec}`);
+if (prog1.oct !== '0o52') throw new Error(`Programming octal: expected 0o52, got ${prog1.oct}`);
+console.log(`✓ TEST PASSED [Programming Hex/Dec/Oct]: hex=${prog1.hex} dec=${prog1.dec} oct=${prog1.oct}`);
+
+// 255 -> hex 0xFF
+const prog2 = calculateProgramming({ value: 255 });
+if (prog2.hex !== '0xFF') throw new Error(`Programming 255 hex: expected 0xFF, got ${prog2.hex}`);
+console.log(`✓ TEST PASSED [Programming 255 hex]: ${prog2.hex}`);
+
+// Bitwise AND: 42 & 15 = 10
+const progAnd = calculateProgramming({ value: 42, operation: 'AND', operand2: 15 });
+if (progAnd.dec !== '10') throw new Error(`Bitwise AND: expected decimal 10, got ${progAnd.dec}`);
+console.log(`✓ TEST PASSED [Bitwise AND 42&15]: ${progAnd.dec}`);
+
+// Bitwise OR: 42 | 15 = 47
+const progOr = calculateProgramming({ value: 42, operation: 'OR', operand2: 15 });
+if (progOr.dec !== '47') throw new Error(`Bitwise OR: expected 47, got ${progOr.dec}`);
+console.log(`✓ TEST PASSED [Bitwise OR 42|15]: ${progOr.dec}`);
+
+// 14. Basic Calculator expression: 10 + 5 * 2 = 20 (operator precedence)
+const basic1 = evaluateBasicExpression('10 + 5 * 2');
+assertEqual('Basic Expression 10+5*2', basic1, 20);
+
+// Simple addition: 7 + 3 = 10
+const basic2 = evaluateBasicExpression('7 + 3');
+assertEqual('Basic Expression 7+3', basic2, 10);
+
+// 15. Scientific Calculator: sin(90 deg) = 1, log(100) = 2, sqrt(144) = 12
+const sci1 = evaluateScientific({ expression: 'sin(90)', angleMode: 'deg' });
+assertEqual('Scientific sin(90 deg)', sci1, 1.0);
+
+const sci2 = evaluateScientific({ expression: 'log(100)', angleMode: 'deg' });
+assertEqual('Scientific log(100)', sci2, 2.0);
+
+const sci3 = evaluateScientific({ expression: 'sqrt(144)', angleMode: 'deg' });
+assertEqual('Scientific sqrt(144)', sci3, 12.0);
+
+// 16. Shape Geometry: circle r=5 -> area ~78.54, perimeter ~31.42
+const shape1 = calculateShapeGeometry({ shape: 'circle', dim1: 5 });
+assertEqual('Shape Circle Area', shape1.areaOrSurface, 78.54, 0.01);
+assertEqual('Shape Circle Perimeter', shape1.perimeterOrVolume, 31.42, 0.01);
+
+// Rectangle 4x6 -> area=24, perimeter=20
+const shape2 = calculateShapeGeometry({ shape: 'rectangle', dim1: 4, dim2: 6 });
+assertEqual('Shape Rectangle Area', shape2.areaOrSurface, 24);
+assertEqual('Shape Rectangle Perimeter', shape2.perimeterOrVolume, 20);
+
+// Sphere r=3 -> surface area ~113.10
+const shape3 = calculateShapeGeometry({ shape: 'sphere', dim1: 3 });
+assertEqual('Shape Sphere Surface', shape3.areaOrSurface, 113.10, 0.01);
+
+// 17. Graph Calculator: x^2 at x=0,1,2 -> y=0,1,4
+const pts = generateGraphPoints('x^2', 0, 2, 1);
+const pt0 = pts.find(p => p.x === 0);
+const pt1 = pts.find(p => p.x === 1);
+const pt2 = pts.find(p => p.x === 2);
+if (!pt0 || Math.abs(pt0.y) > 0.001) throw new Error(`Graph x^2 at x=0: expected y=0, got ${pt0?.y}`);
+if (!pt1 || Math.abs(pt1.y - 1) > 0.001) throw new Error(`Graph x^2 at x=1: expected y=1, got ${pt1?.y}`);
+if (!pt2 || Math.abs(pt2.y - 4) > 0.001) throw new Error(`Graph x^2 at x=2: expected y=4, got ${pt2?.y}`);
+console.log(`✓ TEST PASSED [Graph x^2 points]: (0,${pt0?.y}) (1,${pt1?.y}) (2,${pt2?.y})`);
+
+// sin(x) should have 3 points for range 0 to 2 step 1
+const sinPts = generateGraphPoints('sin(x)', 0, 2, 1);
+if (sinPts.length < 3) throw new Error(`Graph sin(x) expected >= 3 points, got ${sinPts.length}`);
+console.log(`✓ TEST PASSED [Graph sin(x) point count]: ${sinPts.length} points`);
+
+console.log('✅ ALL NEW CALCULATOR TESTS PASSED');
