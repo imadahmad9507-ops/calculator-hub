@@ -293,5 +293,41 @@ const cos0 = generateGraphPoints('cos(0)', -1, 1, 1);
 if (cos0.some(p => p.y !== 1)) throw new Error('cos(0) plotting failed');
 console.log(`✓ TEST PASSED [Constant Graph cos(0)]: plotted horizontal line at y=1`);
 
+// Wide function variety tests: tan(x), exp(x), ln(x), cbrt(x), sinh(x), tanh(x)
+// tan(0) = 0
+const tanPoints = generateGraphPoints('tan(x)', 0, 1, 1);
+const tan0 = tanPoints.find(p => p.x === 0);
+if (!tan0 || Math.abs(tan0.y) > 0.001) throw new Error(`tan(0) failed, got ${tan0?.y}`);
+console.log(`✓ TEST PASSED [Function Graph tan(x)]: tan(0) = ${tan0?.y}`);
+
+// exp(x) at x=0 -> 1, x=1 -> 2.72
+const expPoints = generateGraphPoints('exp(x)', 0, 1, 1);
+const exp0 = expPoints.find(p => p.x === 0);
+const exp1 = expPoints.find(p => p.x === 1);
+if (!exp0 || Math.abs(exp0.y - 1) > 0.01) throw new Error(`exp(0) failed, got ${exp0?.y}`);
+if (!exp1 || Math.abs(exp1.y - 2.72) > 0.01) throw new Error(`exp(1) failed, got ${exp1?.y}`);
+console.log(`✓ TEST PASSED [Function Graph exp(x)]: exp(0)=${exp0?.y}, exp(1)=${exp1?.y}`);
+
+// ln(x) at x=1 -> 0, x=e -> 1
+const lnPoints = generateGraphPoints('ln(x)', 1, 2, 1);
+const ln1 = lnPoints.find(p => p.x === 1);
+if (!ln1 || Math.abs(ln1.y) > 0.01) throw new Error(`ln(1) failed, got ${ln1?.y}`);
+console.log(`✓ TEST PASSED [Function Graph ln(x)]: ln(1) = ${ln1?.y}`);
+
+// cbrt(x) at x=8 -> 2, x=27 -> 3
+const cbrtPoints = generateGraphPoints('cbrt(x)', 8, 27, 19);
+const cbrt8 = cbrtPoints.find(p => p.x === 8);
+if (!cbrt8 || Math.abs(cbrt8.y - 2) > 0.01) throw new Error(`cbrt(8) failed, got ${cbrt8?.y}`);
+console.log(`✓ TEST PASSED [Function Graph cbrt(x)]: cbrt(8) = ${cbrt8?.y}`);
+
+// Hyperbolic: sinh(0) = 0, cosh(0) = 1, tanh(0) = 0
+const sinhPoints = generateGraphPoints('sinh(x)', 0, 1, 1);
+const coshPoints = generateGraphPoints('cosh(x)', 0, 1, 1);
+const tanhPoints = generateGraphPoints('tanh(x)', 0, 1, 1);
+if (Math.abs(sinhPoints[0].y) > 0.01) throw new Error('sinh(0) failed');
+if (Math.abs(coshPoints[0].y - 1) > 0.01) throw new Error('cosh(0) failed');
+if (Math.abs(tanhPoints[0].y) > 0.01) throw new Error('tanh(0) failed');
+console.log(`✓ TEST PASSED [Hyperbolic Functions]: sinh(0)=0, cosh(0)=1, tanh(0)=0`);
+
 console.log('✅ ALL NEW CALCULATOR TESTS PASSED');
 

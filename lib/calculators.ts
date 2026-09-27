@@ -717,27 +717,61 @@ export function generateGraphPoints(
   // Pre-process expression for arbitrary user input
   // 1. Convert power notation ^ to **
   // 2. Convert implicit multiplication e.g. 2x -> 2*x, 3(x) -> 3*(x), (x+1)(x-1) -> (x+1)*(x-1)
-  // 3. Map trig and math functions: sin, cos, tan, sqrt, abs, ln, log, pi, e
-  const preparedExpr = trimmed
+  // 3. Map comprehensive trig, inverse trig, hyperbolic, log, exponential, root and special functions
+  let preparedExpr = trimmed
     .replace(/\^/g, '**')
     .replace(/(\d)\s*([a-zA-Z(])/g, '$1*$2')
     .replace(/(\))\s*([0-9a-zA-Z(])/g, '$1*$2')
+    // Reciprocal trig functions
+    .replace(/\bsec\s*\(/gi, '(1/Math.cos(')
+    .replace(/\bcsc\s*\(/gi, '(1/Math.sin(')
+    .replace(/\bcot\s*\(/gi, '(1/Math.tan(')
+    // Inverse hyperbolic functions
+    .replace(/\basinh\b/gi, 'Math.asinh')
+    .replace(/\bacosh\b/gi, 'Math.acosh')
+    .replace(/\batanh\b/gi, 'Math.atanh')
+    // Hyperbolic functions
+    .replace(/\bsinh\b/gi, 'Math.sinh')
+    .replace(/\bcosh\b/gi, 'Math.cosh')
+    .replace(/\btanh\b/gi, 'Math.tanh')
+    // Inverse trig functions (asin, acos, atan, or arcsin, arccos, arctan)
+    .replace(/\barcsin\b/gi, 'Math.asin')
+    .replace(/\barccos\b/gi, 'Math.acos')
+    .replace(/\barctan\b/gi, 'Math.atan')
+    .replace(/\basin\b/gi, 'Math.asin')
+    .replace(/\bacos\b/gi, 'Math.acos')
+    .replace(/\batan\b/gi, 'Math.atan')
+    // Standard trig functions
     .replace(/\bsin\b/gi, 'Math.sin')
     .replace(/\bcos\b/gi, 'Math.cos')
     .replace(/\btan\b/gi, 'Math.tan')
+    // Roots and exponentials
+    .replace(/\bcbrt\b/gi, 'Math.cbrt')
     .replace(/\bsqrt\b/gi, 'Math.sqrt')
+    .replace(/\bexp\b/gi, 'Math.exp')
     .replace(/\babs\b/gi, 'Math.abs')
+    .replace(/\blog10\b/gi, 'Math.log10')
+    .replace(/\blog2\b/gi, 'Math.log2')
+    .replace(/(?<!Math\.)\blog\b/gi, 'Math.log10')
     .replace(/\bln\b/gi, 'Math.log')
-    .replace(/\blog\b/gi, 'Math.log10')
+    // Rounding & utility
+    .replace(/\bfloor\b/gi, 'Math.floor')
+    .replace(/\bceil\b/gi, 'Math.ceil')
+    .replace(/\bround\b/gi, 'Math.round')
+    .replace(/\bsign\b/gi, 'Math.sign')
+    // Constants
     .replace(/\bpi\b/gi, 'Math.PI')
     .replace(/(?<![a-zA-Z.])e(?![a-zA-Z(])/g, 'Math.E');
 
-  // Verify only allowed tokens (numbers, basic operators, parens, dot, and Math.*)
-  const sanitized = preparedExpr.replace(/[^0-9+\-*/.%()xXMath\.PIEsqrtlogabsicontan]/g, '');
+  // Verify only allowed tokens (numbers, basic operators, parens, dot, and alphanumeric identifiers for Math functions and variables)
+  const sanitized = preparedExpr.replace(/[^0-9+\-*/.%()xXa-zA-Z._]/g, '');
 
   let compiledFn: ((xVal: number) => number) | null = null;
   try {
-    compiledFn = new Function('x', `try { return Number(${sanitized}); } catch { return NaN; }`) as (xVal: number) => number;
+    // Only compile if the sanitized expression does not contain suspicious keywords
+    if (!/(\bwindow\b|\bdocument\b|\bprocess\b|\bglobal\b|\beval\b|\bFunction\b|\bimport\b|\brequire\b)/i.test(sanitized)) {
+      compiledFn = new Function('x', `try { return Number(${sanitized}); } catch { return NaN; }`) as (xVal: number) => number;
+    }
   } catch {
     compiledFn = null;
   }

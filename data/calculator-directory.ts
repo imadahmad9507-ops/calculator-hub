@@ -148,8 +148,8 @@ export const CALCULATORS: CalculatorMeta[] = [
     slug: 'graph-calculator',
     name: 'Function Graph Plotter',
     category: 'math',
-    description: 'Plot 2D mathematical functions like f(x) = sin(x), x^2, or custom polynomials with interactive canvas visualization.',
-    keywords: ['graph', 'plotter', 'function', 'canvas', 'math plot', 'f(x)'],
+    description: 'Plot 2D mathematical functions including sin, cos, tan, exponentials, logs, powers, roots, and custom expressions with interactive SVG canvas.',
+    keywords: ['graph', 'plotter', 'function', 'canvas', 'math plot', 'f(x)', 'trigonometry', 'tan', 'sin', 'cos', 'polynomial'],
     icon: 'LineChart',
   },
 ];

@@ -9,11 +9,15 @@ import { Button } from '@/components/ui/button';
 const PRESET_FUNCTIONS = [
   { label: 'sin(x)', expr: 'sin(x)' },
   { label: 'cos(x)', expr: 'cos(x)' },
+  { label: 'tan(x)', expr: 'tan(x)' },
   { label: 'x²', expr: 'x^2' },
   { label: 'x³', expr: 'x^3' },
   { label: '2x + 3', expr: '2x + 3' },
   { label: 'x² - 4', expr: 'x^2 - 4' },
   { label: 'sqrt(x)', expr: 'sqrt(x)' },
+  { label: 'exp(x)', expr: 'exp(x)' },
+  { label: 'ln(x)', expr: 'ln(x)' },
+  { label: '1/x', expr: '1/x' },
   { label: 'abs(x)', expr: 'abs(x)' },
 ];
 
@@ -130,12 +134,20 @@ export function GraphCalculatorUI() {
                 Plot Graph
               </Button>
             </div>
-            <p className="text-[11px] text-zinc-500 mt-1">
-              Supports: <code className="font-mono text-zinc-700 dark:text-zinc-300">x^2</code>,{' '}
-              <code className="font-mono text-zinc-700 dark:text-zinc-300">sin(x)</code>,{' '}
-              <code className="font-mono text-zinc-700 dark:text-zinc-300">cos(x)</code>,{' '}
-              <code className="font-mono text-zinc-700 dark:text-zinc-300">sqrt(x)</code>,{' '}
-              <code className="font-mono text-zinc-700 dark:text-zinc-300">abs(x)</code>, polynomials.
+            <p className="text-[11px] text-zinc-500 mt-1 leading-relaxed">
+              Supports: <code className="font-mono text-zinc-700 dark:text-zinc-300">sin</code>,{' '}
+              <code className="font-mono text-zinc-700 dark:text-zinc-300">cos</code>,{' '}
+              <code className="font-mono text-zinc-700 dark:text-zinc-300">tan</code>,{' '}
+              <code className="font-mono text-zinc-700 dark:text-zinc-300">sec</code>,{' '}
+              <code className="font-mono text-zinc-700 dark:text-zinc-300">csc</code>,{' '}
+              <code className="font-mono text-zinc-700 dark:text-zinc-300">cot</code>,{' '}
+              <code className="font-mono text-zinc-700 dark:text-zinc-300">asin</code>,{' '}
+              <code className="font-mono text-zinc-700 dark:text-zinc-300">sinh/cosh/tanh</code>,{' '}
+              <code className="font-mono text-zinc-700 dark:text-zinc-300">exp</code>,{' '}
+              <code className="font-mono text-zinc-700 dark:text-zinc-300">ln/log</code>,{' '}
+              <code className="font-mono text-zinc-700 dark:text-zinc-300">sqrt/cbrt</code>,{' '}
+              <code className="font-mono text-zinc-700 dark:text-zinc-300">abs</code>, powers{' '}
+              (<code className="font-mono text-zinc-700 dark:text-zinc-300">x^2</code>, <code className="font-mono text-zinc-700 dark:text-zinc-300">x^3</code>), polynomials, and constants (<code className="font-mono text-zinc-700 dark:text-zinc-300">pi</code>, <code className="font-mono text-zinc-700 dark:text-zinc-300">e</code>).
             </p>
           </div>
 

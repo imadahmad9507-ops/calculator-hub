@@ -288,16 +288,16 @@ export const CALCULATOR_CONFIGS: Record<string, DynamicCalculatorConfig> = {
   'graph-calculator': {
     component: GraphCalculatorUI,
     howItWorks:
-      'Plots 2D mathematical functions over a configurable x-axis range. Evaluates functions point-by-point and renders the curve as an SVG path on a Cartesian plane with grid lines.',
-    formula: 'f(x) evaluated at evenly spaced x values: sin(x), cos(x), tan(x), x², x³, custom polynomial, etc.',
+      'Plots 2D mathematical functions over a configurable x-axis range. Evaluates functions dynamically and renders the curve as an SVG path on a Cartesian plane with interactive coordinate inspection, axes, and grid lines.',
+    formula: 'f(x) evaluated across [x_min, x_max]: sin, cos, tan, sec, csc, cot, sinh, cosh, tanh, exp, ln, log, sqrt, cbrt, abs, powers, polynomials, and constants.',
     faqs: [
       {
         question: 'What function types can I plot?',
-        answer: 'You can plot sin(x), cos(x), tan(x), x², x³, and custom expressions like 2x+1 using standard mathematical notation.',
+        answer: 'You can plot standard trigonometry (sin, cos, tan), reciprocal trig (sec, csc, cot), hyperbolic functions (sinh, cosh, tanh), exponential (exp), logarithms (ln, log), roots (sqrt, cbrt), absolute value (abs), powers (x^2, x^3), polynomials (e.g. 2x + 3), and constant values like sin(45) or 5.',
       },
       {
         question: 'How do I set the x-axis range?',
-        answer: 'Enter the minimum and maximum x values in the range inputs. The plotter evaluates the function at 200 evenly-spaced points within that range.',
+        answer: 'Enter the minimum and maximum x values in the range inputs. The plotter automatically scales the grid and samples up to 150 points for smooth rendering.',
       },
     ],
   },
