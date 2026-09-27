@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+  }
+
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+  }
+}
+
+body {
+  background-color: #09090b;
+  color: #f4f4f5;
+}
+
+/* Hide scrollbar for clean precision display */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
