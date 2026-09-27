@@ -85,13 +85,13 @@ export default function HomePage() {
           Accurate, live-updating calculations for US mortgage, loan EMI, paycheck taxes, compound interest, TDEE, GPA, and business ROI.
         </p>
 
-        {/* Hero Showcase Frame (Video 1 - Lagging Parallax ~0.6x) */}
+        {/* Hero Showcase Frame (Video 1 - Lagging Parallax ~0.38x) */}
         <div className="pt-2 pb-4">
           <ParallaxVideoShowcase
             src="/videos/hero-loop.mp4"
             poster="/videos/hero-loop-poster.jpg"
             alt="Calculator Input to Result Showcase"
-            parallaxSpeed={0.6}
+            parallaxSpeed={0.38}
           />
         </div>
       </section>
@@ -126,7 +126,7 @@ export default function HomePage() {
 
       <AdSlot slotId="homepage-top-banner" format="horizontal" />
 
-      {/* Search & Discovery Showcase Section (Video 2 - Leading Parallax ~1.25x) */}
+      {/* Search & Discovery Showcase Section (Video 2 - Leading Parallax ~1.55x) */}
       <section className="py-6 space-y-4 text-center max-w-3xl mx-auto">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 text-xs font-mono uppercase tracking-widest font-semibold">
           Instant Discovery & Search
@@ -143,7 +143,7 @@ export default function HomePage() {
             src="/videos/search-loop.mp4"
             poster="/videos/search-loop-poster.jpg"
             alt="Search and Discovery Showcase"
-            parallaxSpeed={1.25}
+            parallaxSpeed={1.55}
           />
         </div>
       </section>
