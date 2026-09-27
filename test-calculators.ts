@@ -274,5 +274,24 @@ const polyAt2 = customPoly.find(p => p.x === 2);
 if (!polyAt2 || polyAt2.y !== 0) throw new Error(`Custom graph x^2-4 at x=2: expected 0, got ${polyAt2?.y}`);
 console.log(`✓ TEST PASSED [Custom Graph x^2 - 4 at x=2]: y=${polyAt2?.y}`);
 
+// Constant expressions testing: sin(45) produces horizontal line y = Math.sin(45) ~ 0.85
+const sin45Expected = Math.round(Math.sin(45) * 100) / 100;
+const sin45Points = generateGraphPoints('sin(45)', 0, 4, 1);
+if (sin45Points.length < 5) throw new Error(`sin(45) expected 5 points, got ${sin45Points.length}`);
+sin45Points.forEach(p => {
+  if (Math.abs(p.y - sin45Expected) > 0.01) throw new Error(`sin(45) at x=${p.x}: expected ~${sin45Expected}, got ${p.y}`);
+});
+console.log(`✓ TEST PASSED [Constant Graph sin(45)]: 5 points plotted at y=${sin45Expected}`);
+
+// Constant integer: 5 produces horizontal line y = 5
+const const5 = generateGraphPoints('5', -2, 2, 1);
+if (const5.length !== 5 || const5.some(p => p.y !== 5)) throw new Error('Constant 5 plotting failed');
+console.log(`✓ TEST PASSED [Constant Graph 5]: plotted horizontal line at y=5`);
+
+// Constant cos(0) = 1
+const cos0 = generateGraphPoints('cos(0)', -1, 1, 1);
+if (cos0.some(p => p.y !== 1)) throw new Error('cos(0) plotting failed');
+console.log(`✓ TEST PASSED [Constant Graph cos(0)]: plotted horizontal line at y=1`);
+
 console.log('✅ ALL NEW CALCULATOR TESTS PASSED');
 
