@@ -1,6 +1,16 @@
-# CalcHub Pro — All-In-One Precision Calculator Hub
+# CalcHub Pro — QA & Project Delivery
 
-A production-ready, high-precision instrument panel calculator suite built for US audiences with Next.js 15, Tailwind CSS v4, TypeScript, Zod, Framer Motion, and Fuse.js.
+CalcHub Pro is an all-in-one precision calculator hub built for US audiences with Next.js, Tailwind CSS, and TypeScript.
+
+## QA contribution
+
+- Manually tested multiple pages and calculator workflows.
+- Performed browser automation using Playwright.
+- Prepared test cases, documented results, and delivered final reports.
+- Captured screenshots and screen recordings as evidence for the project submission.
+- Coordinated QA and project delivery through completion.
+
+Testing deliverables reflect the work completed and submitted; detailed submission artifacts are not included in this repository.
 
 ## 🚀 Quick Start (Local Development)
 
