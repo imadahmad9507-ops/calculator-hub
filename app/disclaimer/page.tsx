@@ -2,57 +2,59 @@ import { Metadata } from 'next';
 import { ShieldAlert } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Financial & Medical Disclaimer — CalcHub Pro (Updated September 27, 2026)',
+  title: 'Financial & Health Disclaimer — CalcHub Pro',
   description: 'Explicit financial, tax, mortgage, and medical estimation disclaimers for CalcHub Pro calculators.',
 };
 
 export default function DisclaimerPage() {
   return (
-    <div className="max-w-4xl mx-auto space-y-8 text-sm text-zinc-300 font-sans leading-relaxed py-4">
-      <div className="border-b border-zinc-800 pb-6 space-y-2">
-        <span className="text-xs font-mono text-amber-400 uppercase tracking-widest bg-amber-500/10 px-2.5 py-1 rounded border border-amber-500/20">
+    <div className="max-w-4xl mx-auto space-y-8 text-sm text-zinc-700 dark:text-zinc-300 font-sans leading-relaxed py-4">
+      <div className="pb-6 border-b border-[image:linear-gradient(to_right,transparent,var(--color-slate-200,#e2e8f0),transparent)] dark:border-zinc-800 space-y-2">
+        <span className="text-xs font-semibold text-[#065F46] dark:text-[#34D399] uppercase tracking-wider bg-[#065F46]/10 dark:bg-[#34D399]/10 px-3 py-1 rounded-full border border-[#065F46]/20 dark:border-[#34D399]/30 inline-block">
           Professional Disclaimer
         </span>
-        <h1 className="text-3xl md:text-4xl font-extrabold font-sans text-zinc-100">Financial & Health Disclaimer</h1>
-        <p className="text-xs text-zinc-400 font-mono">Effective Date: September 27, 2026</p>
+        <h1 className="text-3xl md:text-4xl font-extrabold font-sans text-zinc-900 dark:text-zinc-100 tracking-tight">
+          Financial & Health Disclaimer
+        </h1>
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">Effective Date: September 27, 2026</p>
       </div>
 
-      <div className="p-6 rounded-xl border border-amber-500/30 bg-amber-500/5 space-y-4">
-        <div className="flex items-center gap-2 text-amber-400 font-bold text-base">
+      <div className="p-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 space-y-3">
+        <div className="flex items-center gap-2 text-[#065F46] dark:text-[#34D399] font-bold text-base">
           <ShieldAlert className="w-5 h-5 shrink-0" />
           <span>IMPORTANT NOTICE: Educational Estimates Only</span>
         </div>
-        <p className="text-zinc-200">
+        <p className="text-zinc-800 dark:text-zinc-200">
           All calculators, algorithms, numbers, formulas, and tax outputs provided on CalcHub Pro are generated strictly for <strong>educational, general estimation, and quick-reference purposes only</strong>.
         </p>
       </div>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-100">1. Financial, Mortgage & Loan Calculator Disclaimer</h2>
+        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">1. Financial, Mortgage & Loan Calculator Disclaimer</h2>
         <p>
           Calculations produced by our Mortgage, Loan/EMI, Compound Interest, Paycheck, and ROI calculators do not constitute formal financial planning, mortgage pre-approval, banking commitments, or investment advice.
         </p>
-        <ul className="list-disc pl-6 space-y-2 text-zinc-300">
+        <ul className="list-disc pl-6 space-y-2 text-zinc-600 dark:text-zinc-300">
           <li>
-            <strong>Mortgages & Loans:</strong> Estimated monthly payments exclude property taxes, home insurance, private mortgage insurance (PMI), HOA fees, and lender-specific origination charges.
+            <strong>Mortgages & Loans:</strong> Estimated monthly payments reflect principal and interest. Property taxes, home insurance, private mortgage insurance (PMI), HOA fees, and lender origination charges are excluded unless explicitly specified.
           </li>
           <li>
-            <strong>Paycheck & IRS Taxes:</strong> Paycheck estimations reflect federal progressive income tax brackets and standard FICA payroll deductions. They exclude state income taxes, local municipal taxes, pre-tax health/401(k) deductions, and individual tax credits.
+            <strong>Paycheck & IRS Taxes:</strong> Paycheck estimations reflect standard federal progressive income tax brackets and FICA payroll deductions. State and local municipal taxes or specific pre-tax withholding choices are excluded.
           </li>
           <li>
-            <strong>Investments & ROI:</strong> Past performance or projected compound returns do not guarantee future investment yields.
+            <strong>Investments & ROI:</strong> Projected compound returns do not guarantee future investment yields.
           </li>
         </ul>
-        <p>Always consult a certified financial planner (CFP), licensed mortgage originator, or Certified Public Accountant (CPA) before making binding financial decisions.</p>
+        <p>Consult a certified financial planner (CFP), licensed mortgage originator, or Certified Public Accountant (CPA) before making binding financial decisions.</p>
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-xl font-bold text-zinc-100">2. Medical & Health Calculator Disclaimer</h2>
+        <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">2. Medical & Health Calculator Disclaimer</h2>
         <p>
-          Outputs generated by our BMI (Body Mass Index) and Calorie/TDEE (Total Daily Energy Expenditure) calculators are not medical diagnoses, treatment plans, or clinical recommendations.
+          Outputs generated by our BMI and Calorie/TDEE calculators are not medical diagnoses, treatment plans, or clinical recommendations.
         </p>
         <p>
-          BMI and calorie equations (such as Mifflin-St Jeor) are general population statistical models and do not account for muscle composition, bone density, metabolic conditions, or pregnancy. Consult a licensed physician or registered dietitian before starting any diet or exercise regimen.
+          BMI and calorie equations (such as Mifflin-St Jeor) are general statistical models and do not account for muscle composition, metabolic conditions, or specific health factors. Consult a physician or registered dietitian before starting any diet or exercise regimen.
         </p>
       </section>
     </div>

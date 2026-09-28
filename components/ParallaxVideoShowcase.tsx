@@ -1,15 +1,17 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useReducedMotion } from 'framer-motion';
-import { useScroll, useIntersectionObserver } from '@/lib/hooks';
+import { useScroll, useTransform, useSpring, motion, useReducedMotion } from 'framer-motion';
+import { useIntersectionObserver } from '@/lib/hooks';
 
 interface ParallaxVideoProps {
   src: string;
   poster: string;
   alt: string;
-  /** Speed multiplier relative to scroll. e.g. 0.38 for lagging, 1.55 for leading */
-  parallaxSpeed?: number;
+  /** Horizontal drift direction: 'left' for hero (-40px), 'right' for search (+40px) */
+  direction?: 'left' | 'right';
+  /** Vertical drift distance: e.g. -50 for lagging, +60 for leading */
+  verticalDistance?: number;
   className?: string;
 }
 
@@ -17,44 +19,46 @@ export function ParallaxVideoShowcase({
   src,
   poster,
   alt,
-  parallaxSpeed = 1,
+  direction = 'left',
+  verticalDistance = -50,
   className = '',
 }: ParallaxVideoProps) {
   const prefersReducedMotion = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoError, setVideoError] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // IntersectionObserver to play when in viewport and pause when out of view
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // IntersectionObserver to auto-play when in viewport and auto-pause when out of view
   const entry = useIntersectionObserver(containerRef, {
-    threshold: 0.15,
+    threshold: 0.1,
     rootMargin: '50px',
   });
   const isIntersecting = !!entry?.isIntersecting;
 
-  // Track scroll position for scoped parallax effect
-  const scrollY = useScroll();
-  const [offsetY, setOffsetY] = useState(0);
+  // Section-relative scroll progress ["start end" -> "end start"]
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start end', 'end start'],
+  });
 
-  useEffect(() => {
-    if (prefersReducedMotion || !containerRef.current) {
-      setOffsetY(0);
-      return;
-    }
+  // Calculate target horizontal and vertical offsets based on viewport progress
+  const targetX = direction === 'left' ? (isMobile ? -30 : -65) : (isMobile ? 30 : 65);
+  const targetY = isMobile ? verticalDistance * 0.75 : verticalDistance * 1.5;
 
-    const rect = containerRef.current.getBoundingClientRect();
-    const elementCenter = rect.top + rect.height / 2 + window.scrollY;
-    const distanceFromCenter = scrollY - (elementCenter - window.innerHeight / 2);
+  const rawX = useTransform(scrollYProgress, [0, 1], [0, targetX]);
+  const rawY = useTransform(scrollYProgress, [0, 1], [0, targetY]);
 
-    // Responsive scaling: scale max clamp down on mobile screens (< 768px) to prevent disorienting motion
-    const isMobile = window.innerWidth < 768;
-    const maxClamp = isMobile ? 40 : 90; // ±40px on mobile, ±90px on desktop
-
-    // Calculate parallax translation factor
-    const factor = (parallaxSpeed - 1) * 0.22;
-    const computedOffset = Math.max(-maxClamp, Math.min(maxClamp, distanceFromCenter * factor));
-    setOffsetY(computedOffset);
-  }, [scrollY, parallaxSpeed, prefersReducedMotion]);
+  // Apply spring smoothing (stiffness: 60, damping: 20) for smooth, deliberate motion
+  const springX = useSpring(rawX, { stiffness: 60, damping: 20 });
+  const springY = useSpring(rawY, { stiffness: 60, damping: 20 });
 
   // Manage video play/pause lifecycle based on viewport visibility
   useEffect(() => {
@@ -72,18 +76,17 @@ export function ParallaxVideoShowcase({
   const showVideo = !prefersReducedMotion && !videoError;
 
   return (
-    // Outer card container defines strict boundary with overflow-hidden to prevent clipping/spillover
+    // Outer frame container defines strict bounds with overflow-hidden and extra safety margins
     <div
       ref={containerRef}
-      className={`relative w-full max-w-2xl mx-auto rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-md bg-zinc-950 aspect-video group ${className}`}
+      className={`relative w-full max-w-2xl mx-auto rounded-2xl overflow-hidden border border-zinc-200/80 dark:border-zinc-800/80 shadow-xl bg-zinc-950 aspect-video group my-6 ${className}`}
     >
-      {/* Inner transform container handles smooth GPU-accelerated translate3d parallax */}
-      <div
+      {/* Inner Framer Motion div handles smooth spring-interpolated 2D translation */}
+      <motion.div
         className="w-full h-full relative"
         style={{
-          transform: prefersReducedMotion ? 'none' : `translate3d(0, ${offsetY.toFixed(1)}px, 0)`,
-          transition: 'transform 0.08s cubic-bezier(0, 0, 0.2, 1)',
-          willChange: prefersReducedMotion ? 'auto' : 'transform',
+          x: prefersReducedMotion ? 0 : springX,
+          y: prefersReducedMotion ? 0 : springY,
         }}
       >
         {/* Static Poster Image fallback */}
@@ -112,10 +115,10 @@ export function ParallaxVideoShowcase({
             Your browser does not support the video tag.
           </video>
         )}
-      </div>
+      </motion.div>
 
       {/* Subdued boundary frame overlay on top of outer container */}
-      <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-xl pointer-events-none z-10" />
+      <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-2xl pointer-events-none z-10" />
     </div>
   );
 }

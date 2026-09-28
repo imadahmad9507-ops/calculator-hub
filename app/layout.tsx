@@ -52,7 +52,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <Navbar />
-          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">{children}</main>
+          <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 pt-24 md:pt-28 pb-8">{children}</main>
           <Footer />
         </ThemeProvider>
       </body>

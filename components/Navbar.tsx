@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Search, Calculator, Sun, Moon, ArrowUp } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Fuse from 'fuse.js';
@@ -42,27 +43,33 @@ export function Navbar() {
 
   return (
     <>
-      <header
-        className={`sticky top-0 z-50 w-full transition-all duration-200 ${
-          scrolled
-            ? 'bg-white/90 dark:bg-[#0D1114]/90 backdrop-blur-md border-b border-zinc-200 dark:border-zinc-800'
-            : 'bg-transparent border-b border-transparent'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <header className="fixed top-2 z-50 w-full md:top-6 pointer-events-none">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 pointer-events-auto">
+          <div
+            className={`relative flex h-14 items-center justify-between gap-3 rounded-2xl px-3 shadow-lg shadow-black/[0.03] backdrop-blur-sm transition-all duration-200 ${
+              scrolled
+                ? 'bg-white/95 dark:bg-[#0D1114]/95 border border-zinc-200/80 dark:border-zinc-800/80'
+                : 'bg-white/80 dark:bg-[#0D1114]/80 border border-zinc-200/60 dark:border-zinc-800/60'
+            }`}
+          >
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-md bg-[#065F46]/10 dark:bg-[#34D399]/10 border border-[#065F46]/20 dark:border-[#34D399]/30 flex items-center justify-center text-[#065F46] dark:text-[#34D399] group-hover:bg-[#065F46] group-hover:text-white dark:group-hover:bg-[#34D399] dark:group-hover:text-zinc-950 transition-all duration-150">
-              <Calculator className="w-4 h-4" />
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-sans font-extrabold text-base tracking-tight text-zinc-900 dark:text-zinc-100 group-hover:text-[#065F46] dark:group-hover:text-[#34D399] transition-colors">
-                Calc<span className="text-[#065F46] dark:text-[#34D399]">Hub</span>
-              </span>
-              <span className="hidden sm:inline-block text-[10px] font-mono uppercase tracking-widest text-[#065F46] dark:text-[#34D399] bg-[#065F46]/10 dark:bg-[#34D399]/10 px-1.5 py-0.5 rounded border border-[#065F46]/20 dark:border-[#34D399]/30 font-semibold">
-                PRO
-              </span>
-            </div>
+          <Link href="/" className="flex items-center gap-2 group">
+            <Image
+              src="/logo.png"
+              alt="CalcHub Pro Logo"
+              width={180}
+              height={44}
+              className="h-9 sm:h-10 w-auto object-contain dark:hidden"
+              priority
+            />
+            <Image
+              src="/logo-dark.png"
+              alt="CalcHub Pro Logo"
+              width={180}
+              height={44}
+              className="h-9 sm:h-10 w-auto object-contain hidden dark:block"
+              priority
+            />
           </Link>
 
           {/* Global Nav Links */}
@@ -168,6 +175,7 @@ export function Navbar() {
                 </AnimatePresence>
               </button>
             )}
+          </div>
           </div>
         </div>
       </header>
